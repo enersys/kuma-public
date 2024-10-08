@@ -1,0 +1,20 @@
+server:
+  http:
+    port: 9080
+  grpc:
+    port: 9095
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: "http://localhost:3100/loki/api/v1/push"  # URL ของ Loki
+
+scrape_configs:
+  - job_name: ssl_check
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: ssl_check
+          __path__: /var/log/ssl-check.log  # ที่อยู่ของ log file

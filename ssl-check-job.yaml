@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ssl-check-job
+spec:
+  schedule: "*/1 * * * *"  # Run every minute
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: ssl-checker
+            image: ssl-checker:latest
+            imagePullPolicy: IfNotPresent
+            volumeMounts:
+              - name: log-volume
+                mountPath: /var/log  # Mount volume to access log
+          - name: promtail
+            image: grafana/promtail:latest  # Promtail image
+            args:
+              - -config.file=/etc/promtail/config.yaml
+            volumeMounts:
+              - name: log-volume
+                mountPath: /var/log  # Same mount as ssl-checker
+              - name: config-volume
+                mountPath: /etc/promtail  # Mount the config file
+          restartPolicy: OnFailure
+          volumes:
+            - name: log-volume
+              emptyDir: {}
+            - name: config-volume
+              configMap:
+                name: promtail-config  # ConfigMap ที่เก็บ config ของ Promtail
