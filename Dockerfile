@@ -1,13 +1,11 @@
-FROM alpine:latest
+FROM alpine:3.20.3
 
-# Install OpenSSL
-RUN apk add --no-cache openssl
+RUN apk add --no-cache openssl 
 
-# Copy the Bash script into the container
-COPY ssl_check.sh /ssl_check.sh
+WORKDIR /opt/app
 
-# Make the script executable
-RUN chmod +x /ssl_check.sh
+COPY ssl_check.sh .
 
-# Command to run
-CMD ["/bin/sh", "/ssl_check.sh"]
+RUN chmod +x ssl_check.sh
+
+CMD ["./ssl_check.sh"]
