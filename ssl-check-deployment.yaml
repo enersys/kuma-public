@@ -15,7 +15,7 @@ spec:
       containers:
       - name: ssl-check
         image: alpine:3.20.3  # ใช้ Alpine เพื่อความเบา
-        command: ["-c", "/ssl_check.sh"]
+        command: ["sh","-c", "/ssl_check.sh"]
         volumeMounts:
         - name: ssl-check-script
           mountPath: /ssl_check.sh

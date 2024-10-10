@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ssl-check-job
+spec:
+  schedule: "*/1 * * * *"  # Run every minute
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: ssl-ssl-check
+            image: 10.1.140.19:80/enersys/ssl-ssl-check:v0.11
+            imagePullPolicy: IfNotPresent
+          restartPolicy: OnFailure
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
