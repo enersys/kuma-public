@@ -11,6 +11,30 @@ env:
   PROJECT_ID: enersys
 
 jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Fetch all tags
+        run: git fetch --force --tags
+  
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm run setup
+
+      - name: Build Docker Image
+        run: |
+            DOCKER_BUILDKIT=1 docker build --platform linux/amd64 -t harbor.enersys.io/enersys/uptime-kuma:latest -f Dockerfile .              
   release:
     permissions:
       contents: write
