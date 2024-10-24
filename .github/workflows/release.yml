@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '**'
+
+env:
+  REGISTRY: harbor.enersys.io
+  IMAGE_NAME: uptime-kuma
+  PROJECT_ID: enersys
+
+jobs:
+  release:
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+      actions: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Fetch all tags
+        run: git fetch --force --tags
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }} 
+          username: ${{ secrets.HARBOR_USER }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
+    
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{env.PROJECT_ID}}/${{ env.IMAGE_NAME }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Set environment variable
+        run: echo "TAG=${{ github.ref_name }}" >> $GITHUB_ENV
+
+
+      - name: Substitute environment variables in Kubernetes manifest
+        run: |
+          envsubst < deployment.yaml > .manifests/deployment.yaml
+
+      - name: Commit & Push changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.WORKFLOW_TOKEN }}    
+
