@@ -7,6 +7,11 @@ spec:
   selector:
     matchLabels:
       app: uptime-kuma
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -29,16 +34,3 @@ spec:
       - name: uptime-kuma-data
         persistentVolumeClaim:
           claimName: uptime-kuma-pvc
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: uptime-kuma
-spec:
-  type: LoadBalancer
-  ports:
-  - port: 80
-    targetPort: 3001
-  selector:
-    app: uptime-kuma
