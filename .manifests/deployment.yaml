@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: uptime-kuma
+  namespace : cattle-system
 spec:
   replicas: 1
   selector:
@@ -19,7 +20,7 @@ spec:
     spec:
       containers:
       - name: uptime-kuma
-        image: harbor.enersys.io/enersys/uptime-kuma:0.0.9
+        image: harbor.enersys.io/enersys/uptime-kuma:0.0.10
         ports:
         - containerPort: 3001
         env:
