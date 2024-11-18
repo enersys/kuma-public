@@ -42,4 +42,3 @@ jobs:
         run: |
             DOCKER_BUILDKIT=1 docker build --platform linux/amd64 -t harbor.enersys.io/enersys/uptime-kuma:latest -f Dockerfile .
             
-
