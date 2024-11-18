@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: uptime-kuma
+  namespace : cattle-system
 spec:
   replicas: 1
   selector:
@@ -34,6 +35,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace : cattle-system
   name: uptime-kuma
 spec:
   type: LoadBalancer
