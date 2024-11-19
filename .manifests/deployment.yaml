@@ -21,6 +21,8 @@ spec:
       containers:
       - name: uptime-kuma
         image: harbor.enersys.io/enersys/uptime-kuma:0.0.10
+      imagePullSecrets:
+        - name: harbor-pull-secret         
         ports:
         - containerPort: 3001
         env:
