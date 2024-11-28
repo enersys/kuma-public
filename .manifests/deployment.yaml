@@ -28,10 +28,3 @@ spec:
           value: sqlite
         - name: DB_SQLITE_FILE
           value: /app/data/uptime-kuma.sqlite
-        volumeMounts:
-        - name: uptime-kuma-data
-          mountPath: /app/data
-      volumes:
-      - name: uptime-kuma-data
-        persistentVolumeClaim:
-          claimName: uptime-kuma-pvc
