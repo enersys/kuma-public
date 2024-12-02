@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: uptime-kuma
-        image: horborlab.enersys.io/lab1/uptime:$0.2   
+        image: horborlab.enersys.io/lab1/uptime:0.2
         ports:
         - containerPort: 3001
         env:
