@@ -6,9 +6,9 @@ on:
       - '**'
 
 env:
-  REGISTRY: harbor.enersys.io
-  IMAGE_NAME: uptime-kuma
-  PROJECT_ID: enersys
+  REGISTRY: horborlab.enersys.io
+  IMAGE_NAME: uptime
+  PROJECT_ID: lab1
 
 jobs:           
   release:
